@@ -2,6 +2,7 @@
 using CalculatorLibrary;
 
 bool endApp = false;
+
 Console.WriteLine("Console Calcultor in C#\r");
 Console.WriteLine("-----------------------\n");
 
@@ -20,6 +21,7 @@ while (!endApp)
     Console.WriteLine("\t8: Trigonometry");
     Console.WriteLine("\n");
     Console.WriteLine("Q: Quit Calculator");
+    Console.WriteLine($"\n\nUses: {UsageCounter.ReturnUsageCounter()}");
     string? op;
     while (true)
     {

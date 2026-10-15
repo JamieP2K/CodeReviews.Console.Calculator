@@ -92,6 +92,8 @@ namespace CalculatorLibrary
             writer.WriteValue(result);
             writer.WriteEndObject();
 
+            UsageCounter.IncreaseUsageCounter();
+
             return result;
         }
 
