@@ -21,39 +21,72 @@ namespace CalculatorLibrary
 
         public double DoOperation(double num1, double num2, string op)
         {
-            //Default the value to not a number
             double result = double.NaN;
-
-            writer.WriteStartObject();
-            writer.WritePropertyName("Operand1");
-            writer.WriteValue(num1);
-            writer.WritePropertyName("Operand2");
-            writer.WriteValue(num2);
-            writer.WritePropertyName("Operation");
+            string opName;
+            bool usesSecondOperand = true;
 
             switch (op)
             {
-                case "a":
+                case "1":
                     result = num1 + num2;
-                    writer.WriteValue("Add");
+                    opName = "Add";
                     break;
-                case "s":
+                case "2":
                     result = num1 - num2;
-                    writer.WriteValue("Subtract");
+                    opName = "Subtract";
                     break;
-                case "m":
+                case "3":
                     result = num1 * num2;
-                    writer.WriteValue("Multiply");
+                    opName = "Multiply";
                     break;
-                case "d":
-                    if (num2 != 0)
-                    {
-                        result = num1 / num2;
-                    }
-                    writer.WriteValue("Divide");
+                case "4":
+                    if (num2 != 0) result = num1 / num2;
+                    opName = "Divide";
+                    break;
+                case "5":
+                    result = Math.Sqrt(num1);
+                    opName = "Square Root";
+                    usesSecondOperand = false;
+                    break;
+                case "6":
+                    result = Math.Pow(num1, num2);
+                    opName = "Power";
+                    break;
+                case "7":
+                    result = Math.Pow(10, num1);
+                    opName = "10^n";
+                    usesSecondOperand = false;
+                    break;
+                case "sin":
+                    result = Math.Sin(ToRadians(num1));
+                    opName = "Sine";
+                    usesSecondOperand = false;
+                    break;
+                case "cos":
+                    result = Math.Cos(ToRadians(num1));
+                    opName = "Cosine";
+                    usesSecondOperand = false;
+                    break;
+                case "tan":
+                    result = Math.Tan(ToRadians(num1));
+                    opName = "Tangent";
+                    usesSecondOperand = false;
                     break;
                 default:
-                    break;
+                    // Unknown op:
+                    // fail before anything is written to the log
+                    throw new ArgumentException($"Unknown operation: {op}");
+            }
+
+            writer.WriteStartObject();
+            writer.WritePropertyName("Operation");
+            writer.WriteValue(opName);
+            writer.WritePropertyName("Operand1");
+            writer.WriteValue(num1);
+            if (usesSecondOperand)
+            {
+                writer.WritePropertyName("Operand2");
+                writer.WriteValue(num2);
             }
             writer.WritePropertyName("Result");
             writer.WriteValue(result);
@@ -68,6 +101,8 @@ namespace CalculatorLibrary
             writer.WriteEndObject();
             writer.Close();
         }
+
+        private static double ToRadians(double degrees) => degrees * Math.PI / 180;
 
     }
 }
